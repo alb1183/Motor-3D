@@ -39,7 +39,8 @@ class Tres {
     this.base = base;
     this.base_o = base;
 
-    if (this.tipo == 1) {
+   // Creacion del objeto
+    if (this.tipo == 1) { // Rectangulo
       this.puntos_num = 8;
       cubo = new float[puntos_num][3];
       cubo_r = new float[puntos_num][3];
@@ -56,6 +57,7 @@ class Tres {
       this.cubo[7][1] = this.anchura;
       this.cubo[7][2] = this.longitud;
       this.cubo_r = this.cubo;
+      // Matriz de adyacencia de puntos
       puntos_ad = new boolean[puntos_num][puntos_num];
       puntos_ad[0][1] = true;
       puntos_ad[0][2] = true;
@@ -69,7 +71,7 @@ class Tres {
       puntos_ad[2][4] = true;
       puntos_ad[6][7] = true;
       puntos_ad[3][5] = true;
-    } else if (this.tipo == 2) {
+    } else if (this.tipo == 2) { // Piramide(base cuadrada)
       this.puntos_num = 5;
       cubo = new float[puntos_num][3];
       cubo_r = new float[puntos_num][3]; 
@@ -81,6 +83,7 @@ class Tres {
       this.cubo[4][2] = this.longitud/2;
       this.cubo[4][1] = this.anchura/2;
       this.cubo_r = this.cubo;
+      // Matriz de adyacencia de puntos
       puntos_ad = new boolean[puntos_num][puntos_num];
       puntos_ad[0][1] = true;
       puntos_ad[0][2] = true;
@@ -90,7 +93,7 @@ class Tres {
       puntos_ad[4][1] = true;
       puntos_ad[4][2] = true;
       puntos_ad[4][3] = true;
-    } else if (this.tipo == 3) {
+    } else if (this.tipo == 3) { // Octaedro
       this.puntos_num = 6;
       cubo = new float[puntos_num][3];
       cubo_r = new float[puntos_num][3];
@@ -121,7 +124,7 @@ class Tres {
       puntos_ad[5][1] = true;
       puntos_ad[5][2] = true;
       puntos_ad[5][3] = true;
-    } else if (this.tipo == 4) {
+    } else if (this.tipo == 4) { // BiPiramide triangular
       this.puntos_num = 5;
       cubo = new float[puntos_num][3];
       cubo_r = new float[puntos_num][3];
@@ -178,7 +181,6 @@ class Tres {
       rota[0] = this.cubo[i][0];
       rota[1] = this.cubo[i][1];
       rota[2] = this.cubo[i][2];
-      //float[] rota_t = rota_z(rota_y(rota_x(rota, this.giro[0]), this.giro[1]), this.giro[2]);
       float[] rota_t = rota_z(rota_y(rota_x(rota, this.giro[0]), this.giro[1]), this.giro[2]);
       proy[i][0] = rota_t[0];
       proy[i][1] = rota_t[1];
@@ -243,9 +245,6 @@ class Tres {
       rota[2] = this.base_o[i][2];
       //println(rota);
       float[] rota_t = rota_z(rota_y(rota_x(rota, giro_x), giro_y), giro_z);
-      //float[] rota_t = this.rota_x(rota, giro_x);
-      //println(rota_t);
-      //println(rota[1]*sin(giro_x));
       this.base_o[i][0] = rota_t[0];
       this.base_o[i][1] = rota_t[1];
       this.base_o[i][2] = rota_t[2];
@@ -329,11 +328,6 @@ class Tres {
     for (int i = 0; i < puntos_num; i++) {
       float[] obj = {this.cubo_r[i][0], this.cubo_r[i][1], this.cubo_r[i][2]};
       float[] proy_s = shadow_projection(productoMatriz_Especial(this.base, obj), foco_pos, new float[] {this.x, this.y, this.z});
-      //println("-- i("+i+") /"+obj[0]+":"+obj[1]+":"+obj[2]+"//-"+foco_pos[0]+">"+foco_pos[1]+">"+foco_pos[2]+"-// a:" + proy_s[0] + " b:" + proy_s[1] + " c:" + proy_s[2] + " --");
-      //float[] proy_t = projection(proy_s, new float[] {0,0,0});
-      /*if(i == 3) {
-       println(proy_s);
-       }*/
       float[] proy_t = projection(proy_s, new float[] {this.x, this.y, this.z});
       proy[i][0] = proy_t[0];
       proy[i][1] = proy_t[1];
@@ -345,25 +339,6 @@ class Tres {
       stroke(80, 120, 220);
       for (int j = 0; j < puntos_num; j++) {
         if (puntos_ad[i][j] == true) {
-          /*
-            stroke(0, 0, 0);
-           line(this.centro[0] + proy[i][0], this.centro[1] - proy[i][1], this.centro[0] + proy[j][0], this.centro[1] - proy[j][1]);
-           stroke(234, 234, 79);
-           float[] obj_1 = productoMatriz_Especial(this.base, new float[] {this.cubo_r[i][0], this.cubo_r[i][1], this.cubo_r[i][2]});
-           float[] obj_2 = productoMatriz_Especial(this.base, new float[] {this.cubo_r[j][0], this.cubo_r[j][1], this.cubo_r[j][2]});
-           float[] proy_t_2 = projection(new float[] {this.x, this.y, this.z}, new float[] {obj_1[0]+foco_pos[0], obj_1[1]+foco_pos[1], obj_1[2]+foco_pos[2]});
-           float[] proy_t_3 = projection(new float[] {this.x, this.y, this.z}, new float[] {obj_2[0]+foco_pos[0], obj_2[1]+foco_pos[1], obj_2[2]+foco_pos[2]});
-           
-           //float[] proy_t_2 = projection(new float[] {this.x, this.y, this.z}, foco_pos);
-           
-           //println(proy_t_2);
-           //line(foco.centro[0] + proy_t_2[0], foco.centro[1] - proy_t_2[1], this.centro[0] + proy[i][0], this.centro[1] - proy[i][1]);
-           //line(foco.centro[0] + proy_t_2[0], foco.centro[1] - proy_t_2[1], this.centro[0] + proy[j][0], this.centro[1] - proy[j][1]);
-           line(foco.centro[0] + proy_t_2[0], foco.centro[1] - proy_t_2[1], this.centro[0] + proy[i][0], this.centro[1] - proy[i][1]);
-           line(foco.centro[0] + proy_t_3[0], foco.centro[1] - proy_t_3[1], this.centro[0] + proy[j][0], this.centro[1] - proy[j][1]);
-           //ellipse(this.centro[0] + proy[i][0], this.centro[1] - proy[i][1], 3, 3);
-           //ellipse(this.centro[0] + proy[j][0], this.centro[1] - proy[j][1], 3, 3);
-           */
           line(this.centro[0] + proy[i][0], this.centro[1] - proy[i][1], this.centro[0] + proy[j][0], this.centro[1] - proy[j][1]);
         }
       }
@@ -444,12 +419,6 @@ int modo_proyeccion = 1;
 int modo_realtime = 1;
 boolean realist_shadows = true;
 
-/*
-  float alfa = 90 * (PI/180); //90º
- float beta = 225 * (PI/180); //210º
- float gamma = 0 * (PI/180); //0º
- */
-
 void setup() {
   size(1280, 720);
 
@@ -462,7 +431,6 @@ void setup() {
   cubos[6] = new Tres(145, 0, 0, 30, 20, 40, 2, new float[][] {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}});
   cubos[7] = new Tres(35, 0, 0, 35, 20, 40, 2, new float[][] {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}});
   cubos[8] = new Tres(100, 0, 140, 30, 15, 15, 3, new float[][]  {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}});
-  //cubos[8] = new Tres(110, 40, -30, 30, 15, 15, 3, new float[][]  {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}});
 }
 
 
@@ -579,7 +547,6 @@ void controls() {
     if (overRect(0, 0, 90, 25)) {
       if (!locked)
         realist_shadows = !realist_shadows;
-    } else if (false) {
     } else {
       if (mouseButton == LEFT) {
         scale += scale * 0.05;
@@ -758,25 +725,6 @@ void draw_cuadricula() {
 }
 
 void draw_axis() {
-  /*
-  stroke(255, 0, 0); // X (Altura, arriba)
-   line(centro[0], centro[1], centro[0] + ejes_log * cos(alfa) * scale, centro[1] - ejes_log * sin(alfa) * scale);
-   stroke(0, 255, 0); // Y (Anchura, izquierda)
-   line(centro[0], centro[1], centro[0] + ejes_log * cos(beta) * scale, centro[1] - ejes_log * sin(beta) * scale);
-   stroke(0, 0, 255); // Z (Longitud, derecha)
-   line(centro[0], centro[1], centro[0] + ejes_log * cos(gamma) * scale, centro[1] - ejes_log * sin(gamma) * scale);
-   */
-  /*for(int i = -5; i <= 20; i++) {
-   stroke(180, 180, 180); // Y (Anchura, izquierda)
-   int iteracion = i * 40;
-   float[] orig_t = {0, 0, 0};
-   float[] proy_x_t = projection(new float[] {-ejes_log*base[0][0], -ejes_log*base[0][1], -ejes_log*base[0][2]}, orig_t);
-   float[] proy_y_t = projection(new float[] {-ejes_log*base[1][0], -ejes_log*base[1][1]+iteracion, -ejes_log*base[1][2]}, orig_t);
-   float[] proy_x_t_2 = projection(new float[] {2*ejes_log*base[0][0], 2*ejes_log*base[0][1], 2*ejes_log*base[0][2]}, orig_t);
-   float[] proy_y_t_2 = projection(new float[] {2*ejes_log*base[1][0], 2*ejes_log*base[1][1], 2*ejes_log*base[1][2]+iteracion}, orig_t);
-   line(centro[0] + proy_x_t[0], centro[1] - proy_x_t[1], centro[0] + proy_x_t_2[0], centro[1] - proy_x_t_2[1]);
-   line(centro[0] + proy_y_t[0], centro[1] - proy_y_t[1], centro[0] + proy_y_t_2[0], centro[1] - proy_y_t_2[1]);
-   }*/
   // Nuevo metodo, con la base global
   float[] orig = {0, 0, 0};
   float[] proy_x = projection(new float[] {ejes_log*base_global[0][0], ejes_log*base_global[0][1], ejes_log*base_global[0][2]}, orig);
@@ -863,13 +811,6 @@ float[] rota_z(float[] proy_old, float giro_z) {
 
 float[] shadow_projection(float[] obj, float[] foco_pos, float[] pos) {
   float[] obj_proy = new float[3];
-  /*obj_proy[0] = 0;
-   obj_proy[1] = (obj[0] * (-foco_pos[1] / foco_pos[0])) + obj[1];
-   obj_proy[2] = (obj[0] * (-foco_pos[2] / foco_pos[0])) + obj[2];*/
-  /*obj[0] = obj[0] + pos[0];
-   obj[1] = obj[1] + pos[1];
-   obj[2] = obj[2] + pos[2];*/
-  //obj_proy[0] = 0;
   obj_proy[0] = (-pos[0] / foco_pos[0]) * obj[0];
   obj_proy[1] = ((obj[0] * (-foco_pos[1] / foco_pos[0])) + obj[1]);
   obj_proy[2] = ((obj[0] * (-foco_pos[2] / foco_pos[0])) + obj[2]);
